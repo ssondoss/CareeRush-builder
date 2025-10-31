@@ -1,1 +1,27 @@
-/* You can add global styles to this file, and also import other style files */
+body{
+    font-family:Arial, Helvetica, sans-serif
+}
+
+.main-txt{
+    color: #8AA624;
+}
+
+.main-bg{
+    background-color: #8AA624;
+}
+
+.secondary-txt{
+    color: #DBE4C9;
+}
+
+.secondary-bg{
+    background-color: #DBE4C9;
+}
+
+:root {
+  --main-color: #8AA624;
+  --secondary-color: #DBE4C9;
+  --teritairy-color:#FFFFF0;
+  --shadow-color:#cdcbcb;
+
+}

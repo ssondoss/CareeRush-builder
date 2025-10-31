@@ -1,0 +1,55 @@
+.template {
+  width: 794px;
+  background-color: white;
+}
+
+.bg-main {
+  background-color: var(--teritairy-color);
+}
+
+.editable-name {
+  border-bottom: 1px solid transparent;
+  display: inline-block;
+  transition: border-color 0.3s ease;
+  cursor: text;
+}
+
+input,
+textarea {
+  border: none;
+  outline: none;
+  border-bottom: 1px dashed transparent;
+  //   display: inline-block;
+  transition: border-color 0.3s ease !important;
+  cursor: text;
+  width: 100%;
+}
+textarea {
+  width: 100%;
+  resize: none; /* prevent manual drag resize */
+  min-height: 160px;
+  height: auto;
+  max-height: 800px; /* stop growing here */
+}
+input:focus,
+textarea:focus {
+  outline: none;
+  border-bottom-color: var(--shadow-color) !important;
+}
+
+::placeholder {
+  color: var(--shadow-color);
+}
+.dropdown-item:hover {
+  background-color: #f1f1f1;
+  cursor: pointer;
+}
+
+input:hover {
+  border-bottom-color: var(--shadow-color) !important;
+}
+
+.editable-name:focus {
+  outline: none;
+  border-bottom-color: #8aa624; /* underline when editing */
+}

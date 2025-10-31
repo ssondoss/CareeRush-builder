@@ -10,4 +10,9 @@ import { RouterOutlet } from '@angular/router';
 })
 export class AppComponent {
   title = 'cv-builder';
+
+  //registeration
+  //login
+  //Careerush
+  //My Seera
 }

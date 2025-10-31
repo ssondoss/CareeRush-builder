@@ -1,0 +1,142 @@
+<div class="bg-main p-5 d-flex justify-content-center w-100">
+  <div class="template">
+    <app-section-edit-menu
+      [top]="menuTop"
+      [show]="false"
+    ></app-section-edit-menu>
+
+    <div class="p-3">
+      <!--Intro-->
+      <div
+        class="border p-3 border-3 rounded-3 h-auto"
+        style="height: auto; align-items: stretch"
+      >
+        <div class="h3 d-flex">
+          <i
+            class="bi bi-exclamation-lg text-danger"
+            *ngIf="!data.intro.name"
+          ></i>
+          <input
+            name="name"
+            [(ngModel)]="data.intro.name"
+            spellcheck="false"
+            placeholder="Enter your name"
+          />
+        </div>
+        <div class="d-flex mt-2">
+          <i
+            class="bi bi-exclamation-lg text-danger"
+            *ngIf="!data.intro.title"
+          ></i>
+          <input
+            name="title"
+            [(ngModel)]="data.intro.title"
+            spellcheck="false"
+            placeholder="Professional Title"
+          />
+        </div>
+
+        <div class="py-2"></div>
+        <div class="row h-auto">
+          <div class="col-3">
+            <div class="border w-100 p-4 rounded-circle">
+              <img
+                src="person.svg"
+                class=""
+                alt=""
+                height="auto"
+                width="100%"
+              />
+            </div>
+          </div>
+          <div class="col-9">
+            <div class="d-flex" style="height: auto">
+              <i
+                class="bi bi-exclamation-lg text-danger"
+                *ngIf="!data.intro.aboutMe"
+              ></i>
+              <textarea
+                name="aboutMe"
+                spellcheck="false"
+                placeholder="Professional Description"
+                [(ngModel)]="data.intro.aboutMe"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!--contact info-->
+      <div class="p-2">
+        <div class="row mt-1">
+          <div class="col-6">
+            <div class="d-flex">
+              <div class="dropdown">
+                <div
+                  class=" dropdown-toggle"
+                  type="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  <i [class]="selectedIcon"></i>
+              </div>
+
+                <ul
+                  class="dropdown-menu p-2"
+                  style="max-height: 200px; overflow-y: auto; min-width: 35px"
+                >
+                  <li
+                    *ngFor="let icon of icons"
+                    (click)="selectIcon(icon)"
+                    class="dropdown-item d-flex align-items-center"
+                  >
+                    <i
+                      [class]="icon"
+                      style="font-size: 1.2rem; margin-right: 8px"
+                    ></i>
+                  </li>
+                </ul>
+              </div>
+<div class="d-flex">
+    <i
+            class="bi bi-exclamation-lg text-danger"
+            *ngIf="!data.intro.title"
+          ></i>
+          <input
+            name="title"
+            [(ngModel)]="data.intro.title"
+            spellcheck="false"
+            placeholder="Professional Title"
+          />
+</div>
+              Lorem, ipsum dolor.
+            </div>
+            <div class="d-flex">
+              <img src="email.svg" height="20px" class="my-auto me-1" />Lorem,
+              ipsum dolor ispum.
+            </div>
+            <div class="d-flex">
+              <img src="email.svg" height="20px" class="my-auto me-1" />Lorem,
+              ipsum dolor.
+            </div>
+          </div>
+
+          <div class="col-6">
+            <div class="d-flex">
+              <img src="email.svg" height="20px" class="my-auto me-1" />Lorem
+              ipsum dolor sit.
+            </div>
+            <div class="d-flex">
+              <img src="email.svg" height="20px" class="my-auto me-1" />Lorem,
+              ipsum dolor.
+            </div>
+            <div class="d-flex">
+              <img src="email.svg" height="20px" class="my-auto me-1" />Lorem
+              ipsum dolor sit amet consectetur.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
