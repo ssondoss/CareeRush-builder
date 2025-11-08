@@ -4,14 +4,28 @@
 }
 
 .bg-main {
-  background-color: var(--teritairy-color);
+  background-color:#F4F4F4;
 }
-
+.text-main {
+  color:var(--main-color) !important;
+}
 .editable-name {
   border-bottom: 1px solid transparent;
   display: inline-block;
   transition: border-color 0.3s ease;
   cursor: text;
+}
+.hidden{
+  visibility: hidden;
+}
+.custom-modal-size {
+  max-width: 90%;   
+  width: 60%;        
+}
+
+.custom-modal-size .modal-content {
+  height: 700px;     
+  overflow-y: auto;  
 }
 
 input,
@@ -52,4 +66,19 @@ input:hover {
 .editable-name:focus {
   outline: none;
   border-bottom-color: #8aa624; /* underline when editing */
+}
+
+.edit-nav i:hover{
+  color: var(--main-color);
+}
+
+.btn-outline-main{
+  color: var(--main-color) !important;
+  border-color: var(--main-color);
+
+}
+.btn-outline-main:hover{
+  background-color: var(--main-color) !important;
+  color: #ffffff !important;
+
 }

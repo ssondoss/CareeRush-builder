@@ -1,142 +1,425 @@
-<div class="bg-main p-5 d-flex justify-content-center w-100">
-  <div class="template">
-    <app-section-edit-menu
-      [top]="menuTop"
-      [show]="false"
-    ></app-section-edit-menu>
-
-    <div class="p-3">
-      <!--Intro-->
-      <div
-        class="border p-3 border-3 rounded-3 h-auto"
-        style="height: auto; align-items: stretch"
-      >
-        <div class="h3 d-flex">
-          <i
-            class="bi bi-exclamation-lg text-danger"
-            *ngIf="!data.intro.name"
-          ></i>
-          <input
-            name="name"
-            [(ngModel)]="data.intro.name"
-            spellcheck="false"
-            placeholder="Enter your name"
-          />
-        </div>
-        <div class="d-flex mt-2">
-          <i
-            class="bi bi-exclamation-lg text-danger"
-            *ngIf="!data.intro.title"
-          ></i>
-          <input
-            name="title"
-            [(ngModel)]="data.intro.title"
-            spellcheck="false"
-            placeholder="Professional Title"
-          />
+<div class="bg-main p-5 justify-content-center w-100">
+  <div class="modal fade" id="cropperModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog custom-modal-size">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Crop Image</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
         </div>
 
-        <div class="py-2"></div>
-        <div class="row h-auto">
-          <div class="col-3">
-            <div class="border w-100 p-4 rounded-circle">
-              <img
-                src="person.svg"
-                class=""
-                alt=""
-                height="auto"
-                width="100%"
-              />
-            </div>
-          </div>
-          <div class="col-9">
-            <div class="d-flex" style="height: auto">
-              <i
-                class="bi bi-exclamation-lg text-danger"
-                *ngIf="!data.intro.aboutMe"
-              ></i>
-              <textarea
-                name="aboutMe"
-                spellcheck="false"
-                placeholder="Professional Description"
-                [(ngModel)]="data.intro.aboutMe"
-              ></textarea>
-            </div>
-          </div>
+        <div class="modal-body">
+          <image-cropper
+            *ngIf="isBrowser"
+            [imageChangedEvent]="imageChangedEvent"
+            [maintainAspectRatio]="true"
+            [aspectRatio]="1 / 1"
+            format="png"
+            (imageCropped)="imageCropped($event)"
+          ></image-cropper>
+        </div>
+
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-outline-danger"
+            data-bs-dismiss="modal"
+          >
+            <i class="bi bi-x-circle"></i>
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-success"
+            (click)="saveCroppedImage()"
+            data-bs-dismiss="modal"
+          >
+            <i class="bi bi-check2-circle"></i>
+          </button>
         </div>
       </div>
+    </div>
+  </div>
 
-      <!--contact info-->
-      <div class="p-2">
-        <div class="row mt-1">
-          <div class="col-6">
-            <div class="d-flex">
-              <div class="dropdown">
-                <div
-                  class=" dropdown-toggle"
-                  type="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  <i [class]="selectedIcon"></i>
-              </div>
+  <div class="template mx-auto bg-main">
+    <div class="px-5 edit-nav bg-white rounded-3 p-2">
+      <div class="d-flex align-items-center justify-content-between">
+        <div class="d-flex bg-white">
+          <i class="bi bi-arrow-clockwise fs-4"></i>
+          <i class="bi bi-arrow-counterclockwise fs-4"></i>
+        </div>
 
-                <ul
-                  class="dropdown-menu p-2"
-                  style="max-height: 200px; overflow-y: auto; min-width: 35px"
-                >
-                  <li
-                    *ngFor="let icon of icons"
-                    (click)="selectIcon(icon)"
-                    class="dropdown-item d-flex align-items-center"
-                  >
-                    <i
-                      [class]="icon"
-                      style="font-size: 1.2rem; margin-right: 8px"
-                    ></i>
-                  </li>
-                </ul>
-              </div>
-<div class="d-flex">
-    <i
-            class="bi bi-exclamation-lg text-danger"
-            *ngIf="!data.intro.title"
-          ></i>
-          <input
-            name="title"
-            [(ngModel)]="data.intro.title"
-            spellcheck="false"
-            placeholder="Professional Title"
-          />
-</div>
-              Lorem, ipsum dolor.
-            </div>
-            <div class="d-flex">
-              <img src="email.svg" height="20px" class="my-auto me-1" />Lorem,
-              ipsum dolor ispum.
-            </div>
-            <div class="d-flex">
-              <img src="email.svg" height="20px" class="my-auto me-1" />Lorem,
-              ipsum dolor.
-            </div>
+        <div class="d-flex">
+          <i class="bi bi-type-bold fs-4"></i>
+          <i class="bi bi-link-45deg px-2 fs-4"></i>
+          <i class="bi bi-type-italic fs-4 pe-2"></i>
+          <i class="bi bi-type-underline fs-4"></i>
+        </div>
+
+        <div class="d-flex download-btn">
+          <button class="btn btn-outline-main" (click)="generatePDF()">
+            <i class="bi bi-arrow-down-circle fs-5"></i>
+            <span class="px-1 m-auto"> download </span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white mt-4" id="templateEditor">
+      <!-- <app-section-edit-menu
+        [top]="menuTop"
+        [show]="isShowMenu"
+        [left]="menuLeft"
+      ></app-section-edit-menu> -->
+
+      <div class="p-3">
+        <!--Intro-->
+        <div
+          class="border p-3 border-3 rounded-3 h-auto"
+          style="height: auto; align-items: stretch"
+        >
+          <div class="h3 d-flex">
+            <i
+              class="bi bi-exclamation-lg text-danger"
+              *ngIf="!data.intro.name"
+            ></i>
+            <input
+              name="name"
+              [(ngModel)]="data.intro.name"
+              spellcheck="false"
+              placeholder="Enter your name"
+            />
+          </div>
+          <div class="d-flex mt-2" #container1>
+            <i
+              class="bi bi-exclamation-lg text-danger"
+              *ngIf="!data.intro.title"
+            ></i>
+            <input
+              name="title"
+              [(ngModel)]="data.intro.title"
+              spellcheck="false"
+              placeholder="Professional Title"
+            />
           </div>
 
-          <div class="col-6">
-            <div class="d-flex">
-              <img src="email.svg" height="20px" class="my-auto me-1" />Lorem
-              ipsum dolor sit.
+          <div class="py-2"></div>
+          <div class="row h-auto">
+            <div class="col-3">
+              <div
+                class="h-100 w-100 d-flex"
+                #img
+                (click)="showMenu($event, img); imgFile.click()"
+              >
+                <img
+                  [src]="previewImg || 'person.svg'"
+                  class="m-auto rounded-circle border"
+                  alt=""
+                  height="160"
+                  width="160"
+                />
+
+                <input
+                  (change)="onPersonalImgSelected($event)"
+                  type="file"
+                  accept="image/*"
+                  class="hidden"
+                  style="height: 0; width: 0"
+                  #imgFile
+                />
+              </div>
             </div>
-            <div class="d-flex">
-              <img src="email.svg" height="20px" class="my-auto me-1" />Lorem,
-              ipsum dolor.
+            <div class="col-9">
+              <div class="d-flex" #container3 style="height: auto">
+                <i
+                  class="bi bi-exclamation-lg text-danger"
+                  *ngIf="!data.intro.aboutMe"
+                ></i>
+                <textarea
+                  (input)="showMenu($event, container3)"
+                  (focus)="showMenu($event, container3)"
+                  name="aboutMe"
+                  spellcheck="false"
+                  placeholder="Professional Description"
+                  [(ngModel)]="data.intro.aboutMe"
+                ></textarea>
+              </div>
             </div>
-            <div class="d-flex">
-              <img src="email.svg" height="20px" class="my-auto me-1" />Lorem
-              ipsum dolor sit amet consectetur.
+          </div>
+        </div>
+
+        <!--contact info-->
+        <div class="p-2">
+          <div class="row">
+            <div
+              #container1
+              class="col-6 mt-2 contact"
+              (mouseleave)="isShowMenu = false"
+              (mouseover)="showMenu($event)"
+              *ngFor="let item of data.contactMe.items; let i = index"
+            >
+              <div class="d-flex">
+                <div class="dropdown">
+                  <div
+                    class="dropdown-toggle"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    <i [class]="item.icon"></i>
+                  </div>
+
+                  <ul
+                    class="dropdown-menu p-2"
+                    style="max-height: 200px; overflow-y: auto; min-width: 30px"
+                  >
+                    <li
+                      *ngFor="let icon of icons"
+                      (click)="selectIcon(icon, i)"
+                      class="dropdown-item d-flex align-items-center"
+                    >
+                      <i
+                        [class]="icon"
+                        style="font-size: 1rem; margin-right: 8px"
+                      ></i>
+                    </li>
+                  </ul>
+                </div>
+                <div class="d-flex">
+                  <i
+                    class="bi bi-exclamation-lg text-danger"
+                    *ngIf="!item.text"
+                  ></i>
+                  <input
+                    name="title"
+                    [(ngModel)]="item.text"
+                    spellcheck="false"
+                    placeholder="Contact Info"
+                  />
+                </div>
+              </div>
             </div>
+          </div>
+        </div>
+
+        <!--Skills-->
+        <div class="pt-4">
+          <h4>Skills</h4>
+          <div class="d-flex d-flex flex-wrap gap-2">
+            <ng-container
+              *ngFor="
+                let skill of data.skills;
+                let i = index;
+                trackBy: trackByIndex
+              "
+            >
+              <div
+                (click)="isEdittingSkill = i; selectedSkill = skill"
+                *ngIf="isEdittingSkill != i"
+              >
+                {{ skill }} •
+              </div>
+
+              <ng-container *ngIf="i == isEdittingSkill">
+                <div class="d-flex">
+                  <i
+                    class="bi bi-exclamation-lg text-danger"
+                    *ngIf="!skill"
+                  ></i>
+                  <input
+                    style="word-break: break-all; min-width: 25px"
+                    name="skill{{ i }}"
+                    (input)="
+                      resizeInput(skillInput, skillMirror);
+                      selectedSkill = data.skills[i]
+                    "
+                    #skillInput
+                    [(ngModel)]="data.skills[i]"
+                    spellcheck="false"
+                    placeholder="Skill"
+                    [style]="
+                      'width:' + (skillMirror.offsetWidth + 5 + '') + 'px'
+                    "
+                  />
+                </div>
+              </ng-container>
+            </ng-container>
+          </div>
+          <button
+            [disabled]="data.skills[data.skills.length - 1] === ''"
+            class="btn mt-2 btn-outline-success btn-sm"
+            (click)="
+              data.skills.push('');
+              isEdittingSkill = data.skills.length - 1;
+              selectedSkill = 'Skill'
+            "
+          >
+            <i class="bi bi-plus"></i> add skill
+          </button>
+        </div>
+
+        <!--work experience-->
+        <div class="pt-4">
+          <h3>Work Experience</h3>
+
+          <ng-container *ngFor="let experience of data.experiences">
+            <div class="h5 mt-4">
+              <input
+                name="experienceTitle"
+                [(ngModel)]="experience.title"
+                spellcheck="false"
+                placeholder="Enter your title"
+              />
+            </div>
+            <div class="">
+              <input
+                name="experienceCompany"
+                [(ngModel)]="experience.company"
+                spellcheck="false"
+                placeholder="Enter your company"
+              />
+            </div>
+            <div class="d-flex mt-2 small">
+              <div class="me-auto d-flex">
+                <input
+                  style="width: 30px"
+                  class="me-auto"
+                  type="text"
+                  [(ngModel)]="experience.date.from.month"
+                  min="1"
+                  max="12"
+                  placeholder="MM"
+                />
+                <div class="px-2">/</div>
+                <input
+                  style="width: 50px"
+                  type="text"
+                  [(ngModel)]="experience.date.from.year"
+                  min="1900"
+                  max="2025"
+                  placeholder="YYYY"
+                />
+              </div>
+              <div class="me-auto d-flex">
+                <input
+                  style="width: 30px"
+                  class="me-auto"
+                  type="text"
+                  [(ngModel)]="experience.date.to.month"
+                  min="1"
+                  max="12"
+                  placeholder="MM"
+                />
+                <div class="px-2">/</div>
+                <input
+                  style="width: 50px"
+                  type="text"
+                  [(ngModel)]="experience.date.to.year"
+                  min="1900"
+                  max="2025"
+                  placeholder="YYYY"
+                />
+              </div>
+            </div>
+            <div class="small text-light">
+              <input
+                class="text-secondary"
+                name="companyDescription"
+                [(ngModel)]="experience.companyDesc"
+                spellcheck="false"
+                placeholder="Enter your company Description"
+              />
+            </div>
+            <div class="mt-3">Tasks</div>
+            <ul>
+              <li *ngFor="let task of experience.tasks">
+                {{ task }}
+              </li>
+            </ul>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+
+    <!-- template preview-->
+    <div class="bg-white mt-4" id="template" style="word-break: break-all">
+      <div class="p-3">
+        <!--Intro-->
+        <div
+          class="border p-3 border-3 rounded-3 h-auto"
+          style="height: auto; align-items: stretch"
+        >
+          <div class="h3 d-flex">
+            {{ data.intro.name }}
+          </div>
+          <div class="d-flex mt-2" #container1>
+            {{ data.intro.title }}
+          </div>
+
+          <div class="py-2"></div>
+          <div class="row h-auto">
+            <div class="col-3">
+              <div class="h-100 w-100 d-flex">
+                <img
+                  id="personalImg"
+                  [src]="previewImg || 'person.svg'"
+                  class="m-auto rounded-circle border"
+                  height="160"
+                  width="160"
+                />
+              </div>
+            </div>
+            <div class="col-9">
+              <div class="d-flex" style="height: auto">
+                {{ data.intro.aboutMe }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!--contact info-->
+        <div class="p-2">
+          <div class="row">
+            <div
+              class="col-6 mt-2"
+              *ngFor="let item of data.contactMe.items; let i = index"
+            >
+              <div class="d-flex">
+                <i [class]="item.icon" class="pe-1 my-auto"></i>
+                <span>
+                  {{ item.text }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!--Skills-->
+        <div class="pt-4">
+          <h4>Skills</h4>
+          <div class="d-flex d-flex flex-wrap gap-2">
+            <ng-container
+              *ngFor="
+                let skill of data.skills;
+                let i = index;
+                trackBy: trackByIndex
+              "
+            >
+              <div
+                (click)="isEdittingSkill = i; selectedSkill = skill"
+                *ngIf="isEdittingSkill != i"
+              >
+                {{ skill }} •
+              </div>
+            </ng-container>
           </div>
         </div>
       </div>
     </div>
   </div>
 </div>
+<span class="" style="visibility: hidden" #skillMirror>{{
+  selectedSkill
+}}</span>

@@ -11,5 +11,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 })
 export class SectionEditMenuComponent {
   @Input() top = 0;
+  @Input() left = 0;
+ 
   @Input() show = false;
 }

@@ -1,27 +1,28 @@
-body{
-    font-family:Arial, Helvetica, sans-serif
+body {
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-.main-txt{
-    color: #8AA624;
+.main-txt {
+  color: #8aa624;
 }
 
-.main-bg{
-    background-color: #8AA624;
+.main-bg {
+  background-color: #8aa624;
 }
 
-.secondary-txt{
-    color: #DBE4C9;
+.secondary-txt {
+  color: #dbe4c9;
 }
 
-.secondary-bg{
-    background-color: #DBE4C9;
+.secondary-bg {
+  background-color: #dbe4c9;
 }
 
 :root {
-  --main-color: #8AA624;
-  --secondary-color: #DBE4C9;
-  --teritairy-color:#FFFFF0;
-  --shadow-color:#cdcbcb;
-
+  --main-color: #DEA53A;
+  --secondary-color: #000000;
+  --teritairy-color: #48CFCB;
+  --light-main: #fcf8dd;
+  --shadow-color: #c1c0c0;
+  --hover-color: #f3f1f162;
 }
