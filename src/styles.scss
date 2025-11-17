@@ -19,10 +19,117 @@ body {
 }
 
 :root {
-  --main-color: #DEA53A;
+  --primary-color: #DEA53A;
   --secondary-color: #000000;
   --teritairy-color: #48CFCB;
   --light-main: #fcf8dd;
   --shadow-color: #c1c0c0;
   --hover-color: #f3f1f162;
+}
+
+
+.template {
+  width: 794px;
+  background-color: white;
+}
+
+.bg-main {
+  background-color:#F4F4F4;
+}
+.text-main {
+  color:var(--primary-color) !important;
+}
+.editable-name {
+  border-bottom: 1px solid transparent;
+  display: inline-block;
+  transition: border-color 0.3s ease;
+  cursor: text;
+}
+.hidden{
+  visibility: hidden;
+}
+.custom-modal-size {
+  max-width: 90%;   
+  width: 60%;        
+}
+
+.custom-modal-size .modal-content {
+  height: 700px;     
+  overflow-y: auto;  
+}
+input[type="text"]:hover,textarea:hover  {
+  border-bottom: 0.5px dashed var(--shadow-color) !important ;
+}
+
+input[type="text"],
+textarea {
+  border: none !important;
+  outline: none;
+  border-bottom: .5px dashed transparent !important;
+  transition: border-color 0.3s ease !important;
+  cursor: text;
+  width: 100%;
+  
+}
+.form-check-input:checked {
+  background-color: var(--primary-color) ;  
+  border-color: var(--primary-color) ; 
+}
+.form-check-input {
+  outline:none !important;
+  cursor: pointer ;
+  box-shadow: none !important;
+  border: .5px solid #000000  ;
+
+}
+
+
+
+
+.form-check-input:focus,.form-check-input:active {
+  border: 0.5px solid #000000;  
+  border-bottom: .5px solid #000000 !important;
+}
+
+textarea {
+  width: 100%;
+  resize: none; /* prevent manual drag resize */
+  min-height: 160px;
+  height: auto;
+  max-height: 800px; /* stop growing here */
+}
+input[type="text"]:focus, input:active,
+textarea:focus {
+  outline: none !important;
+  border-bottom: 0.5px dashed var(--primary-color) !important;
+}
+
+::placeholder {
+  color: var(--shadow-color);
+}
+.dropdown-item:hover {
+  background-color: #f1f1f1;
+  cursor: pointer;
+}
+
+
+
+.editable-name:focus {
+  outline: none;
+  border-bottom-color: #8aa624; /* underline when editing */
+}
+
+.edit-nav i:hover{
+  color: var(--primary-color);
+}
+
+.btn-outline-main{
+  color: var(--primary-color) !important;
+  border-color: var(--primary-color);
+
+}
+.btn-outline-main:hover{
+  background-color: var(--primary-color) !important;
+  color: #ffffff !important;
+
 }

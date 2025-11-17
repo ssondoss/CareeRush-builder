@@ -1,0 +1,141 @@
+<div class="modal fade" id="cropperModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog custom-modal-size">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Crop Image</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <div class="modal-body">
+        <image-cropper
+          *ngIf="isBrowser"
+          [imageChangedEvent]="imageChangedEvent"
+          [maintainAspectRatio]="true"
+          [aspectRatio]="1 / 1"
+          format="png"
+          (imageCropped)="imageCropped($event)"
+        ></image-cropper>
+      </div>
+
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-outline-danger"
+          data-bs-dismiss="modal"
+        >
+          <i class="bi bi-x-circle"></i>
+        </button>
+        <button
+          type="button"
+          class="btn btn-outline-success"
+          (click)="saveCroppedImage()"
+          data-bs-dismiss="modal"
+        >
+          <i class="bi bi-check2-circle"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--editting mode-->
+
+<div
+  class="border p-3 border-3 rounded-3 h-auto"
+  style="height: auto; align-items: stretch"
+>
+  <div class="h3 d-flex">
+    <i class="bi bi-exclamation-lg text-danger" *ngIf="!data.name"></i>
+    <input
+      name="name"
+      [(ngModel)]="data.name"
+      type="text"
+      spellcheck="false"
+      placeholder="Enter your name"
+    />
+  </div>
+  <div class="d-flex mt-2" #container1 *ngIf="dataConfig.title">
+    <i class="bi bi-exclamation-lg text-danger" *ngIf="!data.title"></i>
+    <input
+      type="text"
+      name="title"
+      [(ngModel)]="data.title"
+      spellcheck="false"
+      placeholder="Professional Title"
+    />
+  </div>
+
+  <div class="py-2"></div>
+  <div class="d-flex h-auto">
+    <div class="" *ngIf="dataConfig.image">
+      <div class="h-100 w-100 d-flex" #img (click)="imgFile.click()">
+        <img
+          [src]="data.img"
+          class="m-auto rounded-circle border"
+          alt=""
+          height="160"
+          width="160"
+        />
+
+        <input
+          (change)="onPersonalImgSelected($event)"
+          type="file"
+          accept="image/*"
+          class="hidden"
+          style="height: 0; width: 0"
+          #imgFile
+        />
+      </div>
+    </div>
+    <div class="flex-fill" *ngIf="dataConfig.summary">
+      <div class="d-flex" #container3 style="height: auto">
+        <i class="bi bi-exclamation-lg text-danger" *ngIf="!data.summary"></i>
+        <textarea
+          name="summary"
+          spellcheck="false"
+          placeholder="Professional Description"
+          [(ngModel)]="data.summary"
+        ></textarea>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--preview mode-->
+
+<div
+  class="border p-3 border-3 rounded-3 h-auto d-none"
+  style="height: auto; align-items: stretch"
+>
+  <div class="h3 d-flex">
+    {{ data.name }}
+  </div>
+  <div class="d-flex mt-2" #container1>
+    {{ data.title }}
+  </div>
+
+  <div class="py-2"></div>
+  <div class="row h-auto">
+    <div class="col-3">
+      <div class="h-100 w-100 d-flex">
+        <img
+          id="personalImg"
+          [src]="data.img"
+          class="m-auto rounded-circle border"
+          height="160"
+          width="160"
+        />
+      </div>
+    </div>
+    <div class="col-9">
+      <div class="d-flex" style="height: auto">
+        {{ data.summary }}
+      </div>
+    </div>
+  </div>
+</div>

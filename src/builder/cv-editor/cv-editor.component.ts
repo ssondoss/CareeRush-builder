@@ -8,7 +8,7 @@ import {
   viewChild,
   viewChildren,
 } from '@angular/core';
-import { SectionEditMenuComponent } from '../section-edit-menu/section-edit-menu.component';
+import { SectionEditMenuComponent } from '../shared/components/section-edit-menu/section-edit-menu.component';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
@@ -19,6 +19,10 @@ import {
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { saveAs } from 'file-saver'; // npm install file-saver
+import { ImagesHandlerService } from '../shared/services/images-handler.service';
+import { MenuService } from '../shared/services/menu.service';
+import { IntroComponent } from '../template1/intro/intro.component';
+import { ContactInfoComponent } from '../template1/contact-info/contact-info.component';
 
 declare var bootstrap: any;
 
@@ -29,37 +33,35 @@ declare var bootstrap: any;
     SectionEditMenuComponent,
     CommonModule,
     HttpClientModule,
+    IntroComponent,
     FormsModule,
     ImageCropperComponent,
+    ContactInfoComponent,
   ],
   templateUrl: './cv-editor.component.html',
   styleUrl: './cv-editor.component.scss',
 })
 export class CvEditorComponent implements OnInit {
-  isShowMenu = false;
   @ViewChild('skillInput') skillInput!: ElementRef<HTMLInputElement>;
-  previewImg: SafeUrl = '';
   initialSkillInputWidth = '35';
   data = {
     intro: {
       name: '',
       title: '',
-      aboutMe: '',
+      summary: '',
       isEditing: false,
+      img: 'person.svg',
       items: {
         name: false,
         title: false,
-        aboutMe: false,
+        summary: false,
         img: false,
       },
     },
 
-    contactMe: {
+    contactInfo: {
       isEditing: false,
       items: [
-        { icon: 'bi bi-envelope', text: '' },
-        { icon: 'bi bi-phone', text: '' },
-        { icon: 'bi bi-house', text: '' },
         { icon: 'bi bi-link', text: '' },
       ],
     },
@@ -77,12 +79,29 @@ export class CvEditorComponent implements OnInit {
         ],
       },
     ],
-    projects:[],
-    education:[],
-    certificates:[],
-    languages:[]
-
+    projects: [],
+    education: [],
+    certificates: [],
+    languages: [],
   };
+  selectedSection!: Record<string, boolean>;
+  dataConfig: any = {
+    intro: { summary: true, title: true, image: true },
+    contactInfo:{icon:true}
+  };
+
+  constructor(
+    private http: HttpClient,
+    private imagesHandlerService: ImagesHandlerService,
+    private menuService: MenuService
+  ) {}
+
+  showMenu(event: Event, container: HTMLElement) {
+    this.menuService.showMenu(event, container);
+  }
+  hideMenu() {
+    this.menuService.hideMenu();
+  }
   trackByIndex(index: number) {
     return index;
   }
@@ -114,36 +133,6 @@ export class CvEditorComponent implements OnInit {
     // Prevent Angular from overwriting during typing:
     event.stopPropagation();
   }
-  selectedIcon = 'bi bi-person'; // Default icon
-  icons = [
-    'bi bi-person',
-    'bi bi-star',
-    'bi bi-briefcase',
-    'bi bi-heart',
-    'bi bi-gear',
-    'bi bi-house',
-    'bi bi-envelope',
-    'bi bi-camera',
-    'bi bi-telephone',
-    'bi bi-envelope',
-  ];
-
-  selectIcon(icon: string, i: number) {
-    this.data.contactMe.items[i].icon = icon;
-  }
-  showMenu(event: Event, container?: HTMLElement) {
-    this.isShowMenu = true;
-    const element = event.currentTarget as HTMLElement; // hovered section
-    const rect = container?.getBoundingClientRect(); // get position + size
-
-    // get position relative to the full page (not just viewport)
-    this.menuTop = (rect?.top || 0) + window.scrollY;
-    console.log(rect?.right, rect?.left);
-
-    this.menuLeft = (rect?.left || 0) - 42; // 10px to the right of the section
-
-    this.menuVisible = true;
-  }
 
   autoGrow(event: any) {
     const input = event.target as HTMLInputElement;
@@ -152,37 +141,7 @@ export class CvEditorComponent implements OnInit {
   }
 
   imageChangedEvent: Event | null = null;
-  croppedImage: SafeUrl = '';
 
-  imageCropped(event: any) {
-    console.log('Crop event:', event); // Check what it contains
-    this.croppedImage = this.sanitizer.bypassSecurityTrustUrl(event.objectUrl);
-  }
-
-  imageLoaded(image: LoadedImage) {
-    // show cropper
-  }
-
-  cropperReady() {
-    // ready to crop
-  }
-
-  loadImageFailed() {
-    // show error message
-  }
-  constructor(
-    @Inject(PLATFORM_ID) private platformId: Object,
-    private sanitizer: DomSanitizer,
-    private http: HttpClient
-  ) {}
-
-  get isBrowser(): boolean {
-    return isPlatformBrowser(this.platformId);
-  }
-
-  saveCroppedImage() {
-    this.previewImg = this.croppedImage;
-  }
   async generatePDF() {
     const template = document.getElementById('template');
     if (!template) return;
@@ -196,7 +155,9 @@ export class CvEditorComponent implements OnInit {
     const imgEl = template.querySelector('img');
 
     if (imgEl) {
-      const base64 = await this.imageToBase64(imgEl as HTMLImageElement);
+      const base64 = await this.imagesHandlerService.imageToBase64(
+        imgEl as HTMLImageElement
+      );
       cvHTML = cvHTML.replace(imgEl.src, base64);
     }
     const styles = Array.from(document.querySelectorAll('style'))
@@ -242,17 +203,6 @@ export class CvEditorComponent implements OnInit {
       });
   }
 
-  imageToBase64(img: HTMLImageElement): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const canvas = document.createElement('canvas');
-      canvas.width = img.naturalWidth;
-      canvas.height = img.naturalHeight;
-      const ctx = canvas.getContext('2d');
-      ctx?.drawImage(img, 0, 0);
-      resolve(canvas.toDataURL('image/png'));
-    });
-  }
-
   resizeInput(input: HTMLInputElement, m: any) {
     // input.style.minWidth = '20px';
     // input.style.width = 'auto'; // reset first!
@@ -271,4 +221,8 @@ export class CvEditorComponent implements OnInit {
   }
 
   selectedSkill = 'Skill';
+
+  c() {
+    console.log('okkkkkkkffff');
+  }
 }

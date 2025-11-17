@@ -1,51 +1,6 @@
 <div class="bg-main p-5 justify-content-center w-100">
-  <div class="modal fade" id="cropperModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog custom-modal-size">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Crop Image</h5>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
-        </div>
-
-        <div class="modal-body">
-          <image-cropper
-            *ngIf="isBrowser"
-            [imageChangedEvent]="imageChangedEvent"
-            [maintainAspectRatio]="true"
-            [aspectRatio]="1 / 1"
-            format="png"
-            (imageCropped)="imageCropped($event)"
-          ></image-cropper>
-        </div>
-
-        <div class="modal-footer">
-          <button
-            type="button"
-            class="btn btn-outline-danger"
-            data-bs-dismiss="modal"
-          >
-            <i class="bi bi-x-circle"></i>
-          </button>
-          <button
-            type="button"
-            class="btn btn-outline-success"
-            (click)="saveCroppedImage()"
-            data-bs-dismiss="modal"
-          >
-            <i class="bi bi-check2-circle"></i>
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <div class="template mx-auto bg-main">
-    <div class="px-5 edit-nav bg-white rounded-3 p-2">
+    <div class=" edit-nav bg-white rounded-3 p-2">
       <div class="d-flex align-items-center justify-content-between">
         <div class="d-flex bg-white">
           <i class="bi bi-arrow-clockwise fs-4"></i>
@@ -58,9 +13,17 @@
           <i class="bi bi-type-italic fs-4 pe-2"></i>
           <i class="bi bi-type-underline fs-4"></i>
         </div>
-
+        <div class="d-flex gap-3 small" *ngIf="selectedSection">
+          <div class="form-check form-check-square "  *ngFor="let item of selectedSection | keyvalue ">
+            <input class="form-check-input" type="checkbox" id="check1" [(ngModel)]="selectedSection[item.key]" />
+            <label class="form-check-label text-muted" for="check1">
+              {{item.key}}
+            </label>
+          </div>
+    
+        </div>
         <div class="d-flex download-btn">
-          <button class="btn btn-outline-main" (click)="generatePDF()">
+          <button class="btn btn-outline-main btn-sm" (click)="generatePDF()">
             <i class="bi bi-arrow-down-circle fs-5"></i>
             <span class="px-1 m-auto"> download </span>
           </button>
@@ -68,96 +31,21 @@
       </div>
     </div>
     <div class="bg-white mt-4" id="templateEditor">
-      <!-- <app-section-edit-menu
-        [top]="menuTop"
-        [show]="isShowMenu"
-        [left]="menuLeft"
-      ></app-section-edit-menu> -->
+      <app-section-edit-menu></app-section-edit-menu>
 
       <div class="p-3">
         <!--Intro-->
-        <div
-          class="border p-3 border-3 rounded-3 h-auto"
-          style="height: auto; align-items: stretch"
-        >
-          <div class="h3 d-flex">
-            <i
-              class="bi bi-exclamation-lg text-danger"
-              *ngIf="!data.intro.name"
-            ></i>
-            <input
-              name="name"
-              [(ngModel)]="data.intro.name"
-              spellcheck="false"
-              placeholder="Enter your name"
-            />
-          </div>
-          <div class="d-flex mt-2" #container1>
-            <i
-              class="bi bi-exclamation-lg text-danger"
-              *ngIf="!data.intro.title"
-            ></i>
-            <input
-              name="title"
-              [(ngModel)]="data.intro.title"
-              spellcheck="false"
-              placeholder="Professional Title"
-            />
-          </div>
-
-          <div class="py-2"></div>
-          <div class="row h-auto">
-            <div class="col-3">
-              <div
-                class="h-100 w-100 d-flex"
-                #img
-                (click)="showMenu($event, img); imgFile.click()"
-              >
-                <img
-                  [src]="previewImg || 'person.svg'"
-                  class="m-auto rounded-circle border"
-                  alt=""
-                  height="160"
-                  width="160"
-                />
-
-                <input
-                  (change)="onPersonalImgSelected($event)"
-                  type="file"
-                  accept="image/*"
-                  class="hidden"
-                  style="height: 0; width: 0"
-                  #imgFile
-                />
-              </div>
-            </div>
-            <div class="col-9">
-              <div class="d-flex" #container3 style="height: auto">
-                <i
-                  class="bi bi-exclamation-lg text-danger"
-                  *ngIf="!data.intro.aboutMe"
-                ></i>
-                <textarea
-                  (input)="showMenu($event, container3)"
-                  (focus)="showMenu($event, container3)"
-                  name="aboutMe"
-                  spellcheck="false"
-                  placeholder="Professional Description"
-                  [(ngModel)]="data.intro.aboutMe"
-                ></textarea>
-              </div>
-            </div>
-          </div>
-        </div>
+        <app-intro [data]="data.intro" [dataConfig]="dataConfig.intro"  (click)="selectedSection = dataConfig.intro"></app-intro>
 
         <!--contact info-->
-        <div class="p-2">
+        <app-contact-info [data]="data.contactInfo" (click)="selectedSection = dataConfig.contactInfo"> </app-contact-info>
+        <!-- <div class="p-2">
           <div class="row">
             <div
               #container1
               class="col-6 mt-2 contact"
-              (mouseleave)="isShowMenu = false"
-              (mouseover)="showMenu($event)"
+              (mouseleave)="hideMenu()"
+              (mouseover)="showMenu($event, container1)"
               *ngFor="let item of data.contactMe.items; let i = index"
             >
               <div class="d-flex">
@@ -202,7 +90,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
 
         <!--Skills-->
         <div class="pt-4">
@@ -229,6 +117,8 @@
                     *ngIf="!skill"
                   ></i>
                   <input
+                        type="text"
+
                     style="word-break: break-all; min-width: 25px"
                     name="skill{{ i }}"
                     (input)="
@@ -267,6 +157,8 @@
           <ng-container *ngFor="let experience of data.experiences">
             <div class="h5 mt-4">
               <input
+                    type="text"
+
                 name="experienceTitle"
                 [(ngModel)]="experience.title"
                 spellcheck="false"
@@ -275,6 +167,8 @@
             </div>
             <div class="">
               <input
+                    type="text"
+
                 name="experienceCompany"
                 [(ngModel)]="experience.company"
                 spellcheck="false"
@@ -284,6 +178,8 @@
             <div class="d-flex mt-2 small">
               <div class="me-auto d-flex">
                 <input
+                      type="text"
+
                   style="width: 30px"
                   class="me-auto"
                   type="text"
@@ -325,6 +221,8 @@
             </div>
             <div class="small text-light">
               <input
+                    type="text"
+
                 class="text-secondary"
                 name="companyDescription"
                 [(ngModel)]="experience.companyDesc"
@@ -347,7 +245,7 @@
     <div class="bg-white mt-4" id="template" style="word-break: break-all">
       <div class="p-3">
         <!--Intro-->
-        <div
+        <!-- <div
           class="border p-3 border-3 rounded-3 h-auto"
           style="height: auto; align-items: stretch"
         >
@@ -377,10 +275,9 @@
               </div>
             </div>
           </div>
-        </div>
-
+        </div> -->
         <!--contact info-->
-        <div class="p-2">
+        <!-- <div class="p-2">
           <div class="row">
             <div
               class="col-6 mt-2"
@@ -394,7 +291,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
 
         <!--Skills-->
         <div class="pt-4">
