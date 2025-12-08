@@ -23,6 +23,8 @@ import { ImagesHandlerService } from '../shared/services/images-handler.service'
 import { MenuService } from '../shared/services/menu.service';
 import { IntroComponent } from '../template1/intro/intro.component';
 import { ContactInfoComponent } from '../template1/contact-info/contact-info.component';
+import { SkillsComponent } from '../template1/skills/skills.component';
+import { ExperienceComponent } from '../template1/experience/experience.component';
 
 declare var bootstrap: any;
 
@@ -36,14 +38,15 @@ declare var bootstrap: any;
     IntroComponent,
     FormsModule,
     ImageCropperComponent,
+    SkillsComponent,
+    ExperienceComponent,
     ContactInfoComponent,
   ],
   templateUrl: './cv-editor.component.html',
   styleUrl: './cv-editor.component.scss',
 })
 export class CvEditorComponent implements OnInit {
-  @ViewChild('skillInput') skillInput!: ElementRef<HTMLInputElement>;
-  initialSkillInputWidth = '35';
+
   data = {
     intro: {
       name: '',
@@ -65,7 +68,7 @@ export class CvEditorComponent implements OnInit {
         { icon: 'bi bi-link', text: '' },
       ],
     },
-    skills: ['sondos1', 'sondo2', 'sondos3', 'sondos4'],
+    skills: [''],
     experiences: [
       {
         title: '',
@@ -96,17 +99,14 @@ export class CvEditorComponent implements OnInit {
     private menuService: MenuService
   ) {}
 
-  showMenu(event: Event, container: HTMLElement) {
-    this.menuService.showMenu(event, container);
-  }
+  // showMenu(event: Event, container: HTMLElement) {
+  //   this.menuService.showMenu(event, container);
+  // }
   hideMenu() {
     this.menuService.hideMenu();
   }
-  trackByIndex(index: number) {
-    return index;
-  }
+
   selectSkill(i: number) {}
-  isEdittingSkill = this.data.skills.length == 0 ? 0 : -1;
 
   ngOnInit(): void {}
   menuTop = 0;
@@ -203,24 +203,23 @@ export class CvEditorComponent implements OnInit {
       });
   }
 
-  resizeInput(input: HTMLInputElement, m: any) {
-    // input.style.minWidth = '20px';
-    // input.style.width = 'auto'; // reset first!
-    // console.log('ok');
-    debugger;
-    // input.style.width = (m.offsetWidth+10).toString() + 'px';
+  // resizeInput(input: HTMLInputElement, m: any) {
+  //   // input.style.minWidth = '20px';
+  //   // input.style.width = 'auto'; // reset first!
+  //   // console.log('ok');
+  //   debugger;
+  //   // input.style.width = (m.offsetWidth+10).toString() + 'px';
 
-    // input.style.width = input.scrollWidth + 'px';
-    console.log(m.offsetWidth, this.selectedSkill);
-  }
-  resizeInputToAsDiv(div: HTMLDivElement) {
-    console.log('div.style.width');
-    console.log(div.offsetWidth);
+  //   // input.style.width = input.scrollWidth + 'px';
+  //   console.log(m.offsetWidth, this.selectedSkill);
+  // }
+  // resizeInputToAsDiv(div: HTMLDivElement) {
+  //   console.log('div.style.width');
+  //   console.log(div.offsetWidth);
 
-    this.initialSkillInputWidth = (div.offsetWidth + 2).toString();
-  }
+  //   this.initialSkillInputWidth = (div.offsetWidth + 2).toString();
+  // }
 
-  selectedSkill = 'Skill';
 
   c() {
     console.log('okkkkkkkffff');

@@ -1,1 +1,83 @@
-<p>experience works!</p>
+<div class="pt-4">
+  <h3>Work Experience</h3>
+
+  <ng-container *ngFor="let experience of data">
+    <div class="h5 mt-4">
+      <input
+        type="text"
+        name="experienceTitle"
+        [(ngModel)]="experience.title"
+        spellcheck="false"
+        placeholder="Enter your title"
+      />
+    </div>
+    <div class="">
+      <input
+        type="text"
+        name="experienceCompany"
+        [(ngModel)]="experience.company"
+        spellcheck="false"
+        placeholder="Enter your company"
+      />
+    </div>
+    <div class="d-flex mt-2 small">
+      <div class="me-auto d-flex">
+        <input
+          type="text"
+          style="width: 30px"
+          class="me-auto"
+          type="text"
+          [(ngModel)]="experience.date.from.month"
+          min="1"
+          max="12"
+          placeholder="MM"
+        />
+        <div class="px-2">/</div>
+        <input
+          style="width: 50px"
+          type="text"
+          [(ngModel)]="experience.date.from.year"
+          min="1900"
+          max="2025"
+          placeholder="YYYY"
+        />
+      </div>
+      <div class="me-auto d-flex">
+        <input
+          style="width: 30px"
+          class="me-auto"
+          type="text"
+          [(ngModel)]="experience.date.to.month"
+          min="1"
+          max="12"
+          placeholder="MM"
+        />
+        <div class="px-2">/</div>
+        <input
+          style="width: 50px"
+          type="text"
+          [(ngModel)]="experience.date.to.year"
+          min="1900"
+          max="2025"
+          placeholder="YYYY"
+        />
+      </div>
+    </div>
+    <div class="small text-light">
+      <input
+        type="text"
+        class="text-secondary"
+        name="companyDescription"
+        [(ngModel)]="experience.companyDesc"
+        spellcheck="false"
+        placeholder="Enter your company Description"
+      />
+    </div>
+    <div class="mt-3">Tasks</div>
+    <ul>
+      <li *ngFor="let task of experience.tasks">
+        {{ task }}
+      </li>
+    </ul>
+  </ng-container>
+</div>

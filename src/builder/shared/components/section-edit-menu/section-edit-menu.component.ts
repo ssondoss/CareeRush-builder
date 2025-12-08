@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MenuService } from '../../services/menu.service';
 import { MenuState } from '../../models/menu-state.model';
@@ -13,6 +13,8 @@ import { MenuState } from '../../models/menu-state.model';
 })
 export class SectionEditMenuComponent implements OnInit {
   constructor(private menuService: MenuService) {}
+  @Output() addEvent = new EventEmitter<string>();
+
   top: number | undefined = 0;
   left: number | undefined = 0;
   show = false;
@@ -23,5 +25,17 @@ export class SectionEditMenuComponent implements OnInit {
       this.left = state.left;
       this.show = state.show;
     });
+  }
+  add() {
+    this.menuService.sendMenuAction('add');
+  }
+  delete() {
+    this.menuService.sendMenuAction('delete');
+  }
+  moveRight() {
+    this.menuService.sendMenuAction('right');
+  }
+  moveLeft() {
+    this.menuService.sendMenuAction('left');
   }
 }

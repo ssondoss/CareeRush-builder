@@ -1,6 +1,6 @@
-<div class="bg-main p-5 justify-content-center w-100">
+<div class="bg-main p-5 justify-content-center w-100" (click)="hideMenu()">
   <div class="template mx-auto bg-main">
-    <div class=" edit-nav bg-white rounded-3 p-2">
+    <div class="edit-nav bg-white rounded-3 p-2">
       <div class="d-flex align-items-center justify-content-between">
         <div class="d-flex bg-white">
           <i class="bi bi-arrow-clockwise fs-4"></i>
@@ -14,13 +14,20 @@
           <i class="bi bi-type-underline fs-4"></i>
         </div>
         <div class="d-flex gap-3 small" *ngIf="selectedSection">
-          <div class="form-check form-check-square "  *ngFor="let item of selectedSection | keyvalue ">
-            <input class="form-check-input" type="checkbox" id="check1" [(ngModel)]="selectedSection[item.key]" />
+          <div
+            class="form-check form-check-square"
+            *ngFor="let item of selectedSection | keyvalue"
+          >
+            <input
+              class="form-check-input"
+              type="checkbox"
+              id="check1"
+              [(ngModel)]="selectedSection[item.key]"
+            />
             <label class="form-check-label text-muted" for="check1">
-              {{item.key}}
+              {{ item.key }}
             </label>
           </div>
-    
         </div>
         <div class="d-flex download-btn">
           <button class="btn btn-outline-main btn-sm" (click)="generatePDF()">
@@ -35,10 +42,18 @@
 
       <div class="p-3">
         <!--Intro-->
-        <app-intro [data]="data.intro" [dataConfig]="dataConfig.intro"  (click)="selectedSection = dataConfig.intro"></app-intro>
+        <app-intro
+          [data]="data.intro"
+          [dataConfig]="dataConfig.intro"
+          (click)="selectedSection = dataConfig.intro"
+        ></app-intro>
 
         <!--contact info-->
-        <app-contact-info [data]="data.contactInfo" (click)="selectedSection = dataConfig.contactInfo"> </app-contact-info>
+        <app-contact-info
+          [data]="data.contactInfo"
+          (click)="selectedSection = dataConfig.contactInfo"
+        >
+        </app-contact-info>
         <!-- <div class="p-2">
           <div class="row">
             <div
@@ -93,7 +108,7 @@
         </div> -->
 
         <!--Skills-->
-        <div class="pt-4">
+        <!-- <div class="pt-4">
           <h4>Skills</h4>
           <div class="d-flex d-flex flex-wrap gap-2">
             <ng-container
@@ -148,17 +163,17 @@
           >
             <i class="bi bi-plus"></i> add skill
           </button>
-        </div>
-
+        </div> -->
+        <app-skills [data]="data.skills"></app-skills>
         <!--work experience-->
-        <div class="pt-4">
+        <app-experience [data]="data.experiences"></app-experience>
+        <!-- <div class="pt-4">
           <h3>Work Experience</h3>
 
           <ng-container *ngFor="let experience of data.experiences">
             <div class="h5 mt-4">
               <input
-                    type="text"
-
+                type="text"
                 name="experienceTitle"
                 [(ngModel)]="experience.title"
                 spellcheck="false"
@@ -167,8 +182,7 @@
             </div>
             <div class="">
               <input
-                    type="text"
-
+                type="text"
                 name="experienceCompany"
                 [(ngModel)]="experience.company"
                 spellcheck="false"
@@ -178,8 +192,7 @@
             <div class="d-flex mt-2 small">
               <div class="me-auto d-flex">
                 <input
-                      type="text"
-
+                  type="text"
                   style="width: 30px"
                   class="me-auto"
                   type="text"
@@ -221,8 +234,7 @@
             </div>
             <div class="small text-light">
               <input
-                    type="text"
-
+                type="text"
                 class="text-secondary"
                 name="companyDescription"
                 [(ngModel)]="experience.companyDesc"
@@ -237,7 +249,7 @@
               </li>
             </ul>
           </ng-container>
-        </div>
+        </div> -->
       </div>
     </div>
 
@@ -292,31 +304,7 @@
             </div>
           </div>
         </div> -->
-
-        <!--Skills-->
-        <div class="pt-4">
-          <h4>Skills</h4>
-          <div class="d-flex d-flex flex-wrap gap-2">
-            <ng-container
-              *ngFor="
-                let skill of data.skills;
-                let i = index;
-                trackBy: trackByIndex
-              "
-            >
-              <div
-                (click)="isEdittingSkill = i; selectedSkill = skill"
-                *ngIf="isEdittingSkill != i"
-              >
-                {{ skill }} •
-              </div>
-            </ng-container>
-          </div>
-        </div>
       </div>
     </div>
   </div>
 </div>
-<span class="" style="visibility: hidden" #skillMirror>{{
-  selectedSkill
-}}</span>

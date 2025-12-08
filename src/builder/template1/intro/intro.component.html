@@ -59,7 +59,7 @@
       placeholder="Enter your name"
     />
   </div>
-  <div class="d-flex mt-2" #container1 *ngIf="dataConfig.title">
+  <div class="d-flex mt-2"  *ngIf="dataConfig.title">
     <i class="bi bi-exclamation-lg text-danger" *ngIf="!data.title"></i>
     <input
       type="text"
@@ -115,7 +115,7 @@
   <div class="h3 d-flex">
     {{ data.name }}
   </div>
-  <div class="d-flex mt-2" #container1>
+  <div class="d-flex mt-2" >
     {{ data.title }}
   </div>
 

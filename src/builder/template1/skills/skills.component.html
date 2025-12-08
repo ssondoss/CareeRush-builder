@@ -1,1 +1,72 @@
-<p>skills works!</p>
+<div class="pt-4">
+  <h4>Skills</h4>
+  <div class="d-flex d-flex flex-wrap gap-2">
+    <ng-container
+      *ngFor="let skill of data; let i = index; trackBy: trackByIndex"
+    >
+      <div
+        #skillsContainer
+        (click)="
+          isEdittingSkill = i;
+          selectedSkill = skill;
+          showMenu($event, skillsContainer, i)
+        "
+        *ngIf="isEdittingSkill != i"
+      >
+        {{ skill }} •
+      </div>
+
+      <ng-container *ngIf="i == isEdittingSkill">
+        <div
+          class="d-flex"
+          #skillsContainerEdit
+          (click)="showMenu($event, skillsContainerEdit, i)"
+        >
+          <i class="bi bi-exclamation-lg text-danger" *ngIf="!skill"></i>
+          <input
+            type="text"
+            style="word-break: break-all; min-width: 25px"
+            name="skill{{ i }}"
+            (input)="
+              selectedSkill = data[i]
+            "
+            #skillInput
+            [(ngModel)]="data[i]"
+            spellcheck="false"
+            placeholder="Skill"
+            [style]="'width:' + (skillMirror.offsetWidth + 5 + '') + 'px; min-width:35px'"
+          />
+        </div>
+      </ng-container>
+    </ng-container>
+  </div>
+  <!-- <button
+    [disabled]="data[data.length - 1] === ''"
+    class="btn mt-2 btn-outline-success btn-sm"
+    (click)="
+      data.push(''); isEdittingSkill = data.length - 1; selectedSkill = 'Skill'
+    "
+  >
+    <i class="bi bi-plus"></i> add skill
+  </button> -->
+</div>
+
+<!--Skills-->
+<div class="pt-4 d-none">
+  <h4>Skills</h4>
+  <div class="d-flex d-flex flex-wrap gap-2">
+    <ng-container
+      *ngFor="let skill of data; let i = index; trackBy: trackByIndex"
+    >
+      <div
+        (click)="isEdittingSkill = i; selectedSkill = skill"
+        *ngIf="isEdittingSkill != i"
+      >
+        {{ skill }} •
+      </div>
+    </ng-container>
+  </div>
+</div>
+<span class="" style="visibility: hidden" #skillMirror>{{
+  selectedSkill
+}}</span>
